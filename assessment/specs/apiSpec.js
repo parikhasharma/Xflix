@@ -15,12 +15,14 @@ describe("Search", () => {
           config.releaseDate,
           config.image
         );
+        // FIXME - should
         response
           .its("body")
           .should("to.have.all.keys", [
             "contentRating",
             "genre",
-            "id",
+            "_id",
+            "__v",
             "previewImage",
             "releaseDate",
             "title",
@@ -84,9 +86,9 @@ describe("Search", () => {
       .its("body.videos")
       .its(1)
       .then((video) => {
-        api.upvote(video.id).then(() => {
+        api.upvote(video._id).then(() => {
           api
-            .getVideoById(video.id)
+            .getVideoById(video._id)
             .its("body.votes.upVotes")
             .should("to.be.greaterThan", 0);
         });
@@ -99,9 +101,9 @@ describe("Search", () => {
       .its("body.videos")
       .its(1)
       .then((video) => {
-        api.downVote(video.id).then(() => {
+        api.downVote(video._id).then(() => {
           api
-            .getVideoById(video.id)
+            .getVideoById(video._id)
             .its("body.votes.downVotes")
             .should("to.be.greaterThan", 0);
         });
@@ -114,9 +116,9 @@ describe("Search", () => {
       .its("body.videos")
       .its(1)
       .then((video) => {
-        api.incrementViewCount(video.id).then(() => {
+        api.incrementViewCount(video._id).then(() => {
           api
-            .getVideoById(video.id)
+            .getVideoById(video._id)
             .its("body.viewCount")
             .should("to.be.greaterThan", 0);
         });
