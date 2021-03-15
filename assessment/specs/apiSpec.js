@@ -3,7 +3,7 @@ import api from "../pages/api";
 describe("Search", () => {
   beforeEach(() => {});
 
-  it("upload 10 videos and verify that 10 videos are available on the platform ", () => {
+  it("POST /v1/videos - Verify expected fields are present in response on uploading videos", () => {
     cy.readFile("api-video.json").then((videoConfigs) => {
       cy.log(videoConfigs);
       videoConfigs.forEach((config) => {
@@ -15,7 +15,6 @@ describe("Search", () => {
           config.releaseDate,
           config.image
         );
-        // FIXME - should
         response
           .its("body")
           .should("to.have.all.keys", [
@@ -34,44 +33,47 @@ describe("Search", () => {
     });
   });
 
-  it("Verify that we have all fifteen videos available in the search ", () => {
+  it("GET /v1/videos - Verify all videos were uploaded", () => {
     let response = api.getAllVideos();
     response.its("body.videos").should("to.have.length.of.at.least", 15);
   });
 
-  it("Verify that we have only one video with title = video18 and Its genre is Education", () => {
+  it("GET /v1/videos?title=video18 - Verify only 1 video with title 'video18' exists and has its genre as Education", () => {
     let response = api.getVideoByTitle("video18");
     response
       .its("body.videos")
+      .should("to.have.length", 1)
       .its(0) //0th element
       .its("genre")
       .should("to.be.equal", "Education");
   });
 
-  it("Verify at least 2 videos are available for sports", () => {
-    let response = api.getVideoByGenre("Sports");
-    response.its("body.videos").should("have.length.of.at.least", 2);
+  it("GET /v1/videos?genres=Sports - Verify exactly 2 videos are available for Sports genre", () => {
+    let response = api.getVideoByGenres("Sports");
+    response.its("body.videos").should("have.length", 2);
   });
 
-  it("Verify that we have only one video with contentrating = 18+", () => {
+  it("GET /v1/videos?genres=Sports,Lifestyle - Verify exactly 4 videos are available for Sports/Lifestyle genres", () => {
+    let response = api.getVideoByGenres("Sports,Lifestyle");
+    response.its("body.videos").should("have.length", 4);
+  });
+
+  it("GET /v1/videos?contentRating=18%2B - Verify there is only one video with contentrating as 18+", () => {
     let response = api.getVideoByContentRating("18%2B");
     response
       .its("body.videos")
+      .should("to.have.length", 1)
       .its(0) //0th element
       .its("genre")
-      .should("to.be.equal", "Education");
+      .should("to.be.equal", "Comedy");
   });
 
-  it("Verify that we have only one vide owith title = video18 ", () => {
-    let response = api.getVideoByTitle("video18");
-    response
-      .its("body.videos")
-      .its(0) //0th element
-      .its("genre")
-      .should("to.be.equal", "Education");
+  it("GET /v1/videos?title=consumed&genres=Sports,Lifestyle&contentRating=12%2B - Verify exactly 3 videos are available", () => {
+    let response = api.getVideosByParameters("consumed", "Sports,Lifestyle", "12%2B");
+    response.its("body.videos").should("have.length", 3);
   });
 
-  it("Verify that video with title First-Video indeed comes first when sorted by releaseDate ", () => {
+  it("GET /v1/videos?sortBy=releaseDate - Verify that video with title First-Video comes first when sorted by releaseDate ", () => {
     let response = api.getAllVideosSortByReleaseDate();
     response
       .its("body.videos")
@@ -80,7 +82,7 @@ describe("Search", () => {
       .should("to.be.equal", "First-Video");
   });
 
-  it("Try to upvote a video and make sure that it actually reflects", () => {
+  it("PATCH /v1/videos/:videoId/votes - Verify upvote feature works", () => {
     let response = api.getAllVideos();
     response
       .its("body.videos")
@@ -95,7 +97,7 @@ describe("Search", () => {
       });
   });
 
-  it("Try to downvote a video and make sure that it actually reflects", () => {
+  it("PATCH /v1/videos/:videoId/votes - Verify downvote feature works", () => {
     let response = api.getAllVideos();
     response
       .its("body.videos")
@@ -110,7 +112,7 @@ describe("Search", () => {
       });
   });
 
-  it("should increment video view count on calling the /videos/:videoId/views endpoint", () => {
+  it("PATCH /v1/videos/:videoId/views - Verify view count is increased", () => {
     let response = api.getAllVideos();
     response
       .its("body.videos")
