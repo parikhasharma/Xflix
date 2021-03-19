@@ -7,7 +7,7 @@ set -e
 
 # kill descendants on exit
 # https://stackoverflow.com/a/2173421
-# trap "echo 'Cleaning up resources' && trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+ trap "echo 'Cleaning up resources' && trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
 # 1. Start Node app
 mongo xflix --eval "db.dropDatabase()"
