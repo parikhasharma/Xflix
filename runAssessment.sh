@@ -23,7 +23,7 @@ then
   echo "Killed application running on $NODE_PORT"
 fi
 
-cd $PWD/backend && npm install && nohup npm start &
+cd $PWD/backend && pnpm install && nohup npm start &
 
 while ! netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; do
   echo "waiting for Node application to start on port $NODE_PORT"
@@ -31,4 +31,4 @@ while ! netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; do
 done
 
 # 2. Run tests
-cd $PWD/assessment && npm install && npm run test
+cd $PWD/assessment && pnpm install && npm run test
