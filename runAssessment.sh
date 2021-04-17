@@ -1,3 +1,6 @@
+# setup for pnpm to pickup npm in script
+shopt -s expand_aliases
+. ~/.bash_aliases
 
 NODE_PORT=8082
 NODE_DIR="$PWD/backend"
