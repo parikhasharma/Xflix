@@ -58,19 +58,16 @@ describe("Search", () => {
     response.its("body.videos").should("have.length", 4);
   });
 
-  it("GET /v1/videos?contentRating=18%2B - Verify there is only one video with contentrating as 18+", () => {
+  it("GET /v1/videos?contentRating=18%2B - Verify all videos are returned with contentRating set as 18+", () => {
     let response = api.getVideoByContentRating("18%2B");
     response
       .its("body.videos")
-      .should("to.have.length", 1)
-      .its(0) //0th element
-      .its("genre")
-      .should("to.be.equal", "Comedy");
+      .should("to.have.length.at.least", 20);
   });
 
-  it("GET /v1/videos?title=consumed&genres=Sports,Lifestyle&contentRating=12%2B - Verify exactly 3 videos are available", () => {
+  it("GET /v1/videos?title=consumed&genres=Sports,Lifestyle&contentRating=12%2B - Verify exactly 4 videos are available", () => {
     let response = api.getVideosByParameters("consumed", "Sports,Lifestyle", "12%2B");
-    response.its("body.videos").should("have.length", 3);
+    response.its("body.videos").should("have.length", 4);
   });
 
   it("GET /v1/videos?sortBy=releaseDate - Verify that video with title First-Video comes first when sorted by releaseDate ", () => {
