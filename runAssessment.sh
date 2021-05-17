@@ -32,7 +32,6 @@ while ! netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; do
   echo "waiting for Node application to start on port $NODE_PORT"
   sleep 2 # time in seconds, tune it as needed
 done
-# CRIO_SOLUTION_AND_STUB_END_MODULE_NODE
 
 # 2. Run tests
 cd $PWD/assessment && npm install && npm run test
