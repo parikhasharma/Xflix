@@ -1,6 +1,8 @@
+# CRIO_UNCOMMENT_SOLUTION_START_MODULE_NODE
 # setup for pnpm to pickup npm in script
-shopt -s expand_aliases
-. ~/.bash_aliases
+# shopt -s expand_aliases
+# . ~/.bash_aliases
+# CRIO_UNCOMMENT_SOLUTION_END_MODULE_NODE
 
 NODE_PORT=8082
 NODE_DIR="$PWD/backend"
@@ -22,7 +24,7 @@ fi
 
 if netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; 
 then
-  lsof -ti tcp:$NODE_PORT | xargs kill
+  lsof -ti tcp:$NODE_PORT | xargs kill -9
   echo "Killed application running on $NODE_PORT"
 fi
 

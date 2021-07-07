@@ -124,3 +124,5 @@ backend/package-lock.json
 backend/pnpm-lock.yaml
 backend/node_modules
 backend/node_modules/
+
+assessment/test-results.xml
