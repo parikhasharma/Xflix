@@ -3,7 +3,7 @@
  . ~/.bash_aliases
 
 NODE_PORT=8082
-PROJECT_DIR="$PROJECT_DIR"
+PROJECT_DIR="$PWD"
 NODE_DIR="$PROJECT_DIR/backend"
 
 # exit on non-zero return code
