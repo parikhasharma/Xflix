@@ -3,7 +3,8 @@
  . ~/.bash_aliases
 
 NODE_PORT=8082
-NODE_DIR="$PWD/backend"
+PROJECT_DIR="$PROJECT_DIR"
+NODE_DIR="$PROJECT_DIR/backend"
 
 # exit on non-zero return code
 set -e
@@ -26,7 +27,7 @@ then
   echo "Killed application running on $NODE_PORT"
 fi
 
-cd $PWD/backend && npm install && nohup npm start &
+cd $PROJECT_DIR/backend && npm install && pm2 start npm -- start
 
 while ! netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; do
   echo "waiting for Node application to start on port $NODE_PORT"
@@ -34,4 +35,6 @@ while ! netstat -tna | grep 'LISTEN\>' | grep -q $NODE_PORT; do
 done
 
 # 2. Run tests
-cd $PWD/assessment && npm install && npm run test
+cd $PROJECT_DIR/assessment && npm install && npm run test || true
+
+cd $PROJECT_DIR/backend && pm2 stop npm
