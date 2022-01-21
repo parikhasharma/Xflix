@@ -50,24 +50,52 @@ describe("Search", () => {
 
   it("GET /v1/videos?genres=Sports - Verify exactly 2 videos are available for Sports genre", () => {
     let response = api.getVideoByGenres("Sports");
-    response.its("body.videos").should("have.length", 2);
+
+    response
+      .its("body.videos")
+      .should("to.have.length", 2)
+      .its(0) //0th element
+      .its("genre")
+      .should("to.be.equal", "Sports");
   });
 
   it("GET /v1/videos?genres=Sports,Lifestyle - Verify exactly 4 videos are available for Sports/Lifestyle genres", () => {
     let response = api.getVideoByGenres("Sports,Lifestyle");
-    response.its("body.videos").should("have.length", 4);
-  });
 
-  it("GET /v1/videos?contentRating=18%2B - Verify all videos are returned with contentRating set as 18+", () => {
-    let response = api.getVideoByContentRating("18%2B");
     response
       .its("body.videos")
-      .should("to.have.length.at.least", 20);
+      .should("to.have.length", 4)
+      .its(0) //0th element
+      .its("genre")
+      .should("to.be.oneOf", ["Sports", "Lifestyle"]);
+
+    // response.its("body.videos").should("have.length", 4);
+  });
+
+  it("GET /v1/videos?contentRating=18%2B - Verify videos are returned with contentRating set as 18+", () => {
+    let response = api.getVideoByContentRating("18%2B");
+
+    response
+      .its("body.videos")
+      .should("to.have.length", 1)
+      .its(0) //0th element
+      .its("contentRating")
+      .should("to.be.oneOf", ["18+"]);
   });
 
   it("GET /v1/videos?title=consumed&genres=Sports,Lifestyle&contentRating=12%2B - Verify exactly 4 videos are available", () => {
-    let response = api.getVideosByParameters("consumed", "Sports,Lifestyle", "12%2B");
-    response.its("body.videos").should("have.length", 4);
+    let response = api.getVideosByParameters(
+      "consumed",
+      "Sports,Lifestyle",
+      "12%2B"
+    );
+
+    response
+      .its("body.videos")
+      .should("to.have.length", 3)
+      .its(0) //0th element
+      .its("title")
+      .should("to.match", /^consumed/i);
   });
 
   it("GET /v1/videos?sortBy=releaseDate - Verify that video with title First-Video comes first when sorted by releaseDate ", () => {
@@ -124,4 +152,3 @@ describe("Search", () => {
       });
   });
 });
-
