@@ -117,6 +117,7 @@ dist
 .pnp.*
 
 .DS_Store
+pnpm-lock.yaml
 build/
 node_modules
 node_modules/
@@ -126,3 +127,4 @@ backend/node_modules
 backend/node_modules/
 
 assessment/test-results.xml
+assessment/pnpm-lock.yaml
