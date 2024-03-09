@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT;
+const PORT = process.env.NODE_ENV;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // ------------------------MongoDB Server----------------------------------
